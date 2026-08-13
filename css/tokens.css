@@ -1,0 +1,92 @@
+/*
+  Design tokens do site da COMAPE.
+  Esquema de cores único e fixo (sem modo escuro/claro alternável).
+  Paleta em tons de azul (menu, títulos, bordas e fundos), com o Vermelho
+  UFMG (Manual da Marca 2011) mantido como cor de destaque/CTA.
+  Para "rebrandar" o site, basta editar os valores abaixo.
+*/
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/assets/fonts/poppins/Poppins-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Cor de marca — azul institucional (menu, títulos, bordas, fundos) */
+  --cor-primaria-900: #12477a;
+  --cor-primaria-700: #1a5f9e;
+  --cor-primaria-500: #2f7dc4;
+  --cor-primaria-300: #7bafdd;
+  --cor-primaria-100: #dce9f6;
+
+  /* Cor de destaque */
+  --cor-destaque-700: #f17807;
+  --cor-destaque-500: #df7f19;
+  --cor-destaque-100: #fadec5;
+
+  /* Neutros */
+  --cor-texto: #1a1a1a;
+  --cor-texto-suave: #4a4a4a;
+  --cor-fundo: #ffffff;
+  --cor-fundo-alt: #eaf2fa;
+  --cor-superficie: #ffffff;
+  --cor-borda: #d7e6f5;
+
+  /* Tipografia — Poppins para tudo (títulos e texto) */
+  --fonte-base: "Poppins", "Segoe UI", Arial, sans-serif;
+  --fonte-titulo: "Poppins", "Segoe UI", Arial, sans-serif;
+
+  --texto-xs: 0.8125rem;
+  --texto-sm: 0.9375rem;
+  --texto-base: 1.0625rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+  --texto-2xl: 2.5rem;
+  --texto-3xl: 3.25rem;
+
+  /* Espaçamento (escala de 8px) */
+  --espaco-1: 0.5rem;
+  --espaco-2: 1rem;
+  --espaco-3: 1.5rem;
+  --espaco-4: 2rem;
+  --espaco-5: 3rem;
+  --espaco-6: 4.5rem;
+  --espaco-7: 6rem;
+
+  /* Formas */
+  --raio-sm: 6px;
+  --raio-md: 12px;
+  --raio-lg: 20px;
+  --sombra-suave: 0 1px 3px rgba(27, 42, 74, 0.08), 0 6px 20px rgba(27, 42, 74, 0.06);
+
+  /* Layout */
+  --largura-conteudo: 72rem;
+  --largura-leitura: 42rem;
+}

@@ -1,0 +1,1041 @@
+@import url("tokens.css");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  font-size: var(--texto-base);
+  line-height: 1.6;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--cor-primaria-500);
+}
+
+a:hover {
+  color: var(--cor-destaque-700);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--fonte-titulo);
+  line-height: 1.15;
+  color: var(--cor-primaria-900);
+  margin: 0 0 var(--espaco-2);
+}
+
+h1 {
+  font-size: var(--texto-3xl);
+}
+
+h2 {
+  font-size: var(--texto-2xl);
+}
+
+h3 {
+  font-size: var(--texto-xl);
+}
+
+p {
+  margin: 0 0 var(--espaco-2);
+}
+
+.container {
+  max-width: var(--largura-conteudo);
+  margin: 0 auto;
+  padding: 0 var(--espaco-3);
+}
+
+.prosa {
+  max-width: var(--largura-leitura);
+}
+
+/* Cabeçalho e navegação */
+.cabecalho {
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Desktop: o menu some ao rolar para baixo e volta ao rolar para cima
+   (ver script em layouts/base.njk). No mobile o comportamento é outro
+   (botão fixo sempre visível), por isso isso fica restrito a telas largas. */
+@media (min-width: 40.0625rem) {
+  .cabecalho {
+    transition: transform 0.3s ease, opacity 1s ease;
+  }
+
+  .cabecalho.escondido {
+    transform: translateY(-100%);
+  }
+}
+
+/* Na página inicial, o menu só aparece junto com a foto de fundo (fase 3) */
+.pagina-inicial .cabecalho {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease, transform 0.3s ease;
+}
+
+.pagina-inicial .cabecalho.visivel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Sobre a foto, o ícone do hambúrguer fica em azul claro (sem fundo) */
+.pagina-inicial .menu-toggle span {
+  background: var(--cor-primaria-100);
+}
+
+.cabecalho__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  padding: var(--espaco-2) 0;
+  flex-wrap: wrap;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-1);
+  text-decoration: none;
+  color: var(--cor-primaria-900);
+}
+
+.marca__sigla {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.marca__sub {
+  display: block;
+  font-size: var(--texto-xs);
+  color: var(--cor-texto-suave);
+  font-family: var(--fonte-base);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--raio-sm);
+  text-decoration: none;
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.nav a:hover {
+  background: var(--cor-primaria-100);
+  color: var(--cor-primaria-900);
+}
+
+.nav a[aria-current="page"] {
+  background: var(--cor-primaria-900);
+  color: #fff;
+}
+
+/* Botão hambúrguer — só aparece no mobile (ver media query abaixo) */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
+}
+
+.menu-toggle span {
+  display: block;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--cor-primaria-900);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease, background 0.3s ease;
+}
+
+.menu-toggle.aberto span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.aberto span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.aberto span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Hero
+   Fundo claro e neutro de propósito: deixa espaço para, no futuro, uma
+   foto/vídeo de fundo em preto e branco (ver .hero--media abaixo) sem
+   competir com o degradê de cor. */
+.hero {
+  min-height: calc(100vh - 4.5rem);
+  display: flex;
+  align-items: center;
+  padding: var(--espaco-6) 0 var(--espaco-5);
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Telas com pouca altura (notebooks de resolução menor, zoom alto etc.):
+   reduz o espaçamento vertical e para de forçar 100vh, para não obrigar
+   a rolar dentro do próprio hero antes de ver o resto da página. */
+@media (max-height: 750px) {
+  .hero {
+    padding: var(--espaco-4) 0 var(--espaco-3);
+  }
+
+  .logo-forum-escala {
+    margin-top: var(--espaco-2);
+  }
+}
+
+.hero .container {
+  width: 100%;
+}
+
+/* Variante preparada para receber uma imagem/vídeo de fundo em P&B:
+   adicionar a classe "hero--media" e, dentro de .hero, um elemento
+   .hero__media (img/video) como primeiro filho.
+
+   A entrada acontece em duas fases, controladas via JS
+   (ver mostrarTextoForum em partials/logo-forum.njk):
+     Fase 1/2 — fundo ainda branco: só o símbolo (centralizado) e depois o
+                texto "4º Fórum..." (preto) aparecem.
+     Fase 3   — classe "foto-visivel" é adicionada: a foto de fundo, a
+                barra institucional, a data, o texto de chamada e a seta
+                surgem juntos, e o texto do logo passa a branco. */
+.hero--media {
+  position: relative;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.hero--media.foto-visivel {
+  border-bottom: none;
+}
+
+.hero--media .hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.hero--media.foto-visivel .hero__media {
+  opacity: 1;
+}
+
+.hero--media .hero__media img,
+.hero--media .hero__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A imagem (hero-ufmg-pb.jpg) já vem em preto e branco de verdade (arquivo
+   grayscale, não colorido+filtro) — não precisa de filter:grayscale(1) aqui.
+   Esse filtro chegou a estar presente e é caro de recompor a cada frame
+   durante o fade de opacidade (especialmente sob renderização por
+   software), o que causava saltos na animação nos vídeos gerados para o
+   /reels/. Se algum dia entrar um vídeo ou imagem colorida nesse lugar,
+   aplique o preto-e-branco no arquivo em si (ex.: ffmpeg/photoshop), não
+   via CSS. */
+
+.hero--media .hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
+}
+
+.hero--media .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero--media.foto-visivel .hero__eyebrow,
+.hero--media.foto-visivel .hero__lead {
+  color: #f2f2f2;
+}
+
+.hero--media.foto-visivel .logo-forum #logo-text {
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.hero--media.foto-visivel .seta-scroll {
+  color: #f2f2f2;
+}
+
+.hero--media.foto-visivel .seta-scroll__icone {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.hero--media.foto-visivel .seta-scroll:hover {
+  color: var(--cor-destaque-500);
+}
+
+.hero--media.foto-visivel .data-forum {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9), 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-primaria-700);
+  margin-bottom: var(--espaco-1);
+}
+
+/* "PPGMUS | UFMG" — entre o logo e a data. PPGMUS (texto) desliza para a
+   esquerda, a barra central aparece, e o logo da UFMG desliza para a
+   direita — cada um com sua própria animação (ver .mostrar abaixo). */
+:root {
+  /* Espaço entre "PPGMUS", a barra "|" e o logo da UFMG */
+  --subtitulo-forum-espacamento: 2.5rem;
+}
+
+.subtitulo-forum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--subtitulo-forum-espacamento);
+  text-align: center;
+  font-size: clamp(1.25rem, 0.55rem + 3vw, 2.95rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-primaria-700);
+  margin: 0 0 var(--espaco-1);
+}
+
+/* Anula a animação genérica de .anim-entrada neste elemento — cada filho
+   (PPGMUS / barra / logo UFMG) tem sua própria animação, abaixo. */
+.subtitulo-forum.anim-entrada {
+  opacity: 1;
+  transform: none;
+}
+
+.subtitulo-forum.anim-entrada.mostrar {
+  animation: none;
+}
+
+.hero--media.foto-visivel .subtitulo-forum {
+  color: #f2f2f2;
+}
+
+.hero--media.foto-visivel .subtitulo-forum__ppgmus,
+.hero--media.foto-visivel .subtitulo-forum__barra {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Ajuste fino do logo da UFMG ao lado de "PPGMUS |" — mude só estes 3
+   valores para calibrar tamanho e posição. Use "em" (não "px") no
+   deslocamento — assim o ajuste escala junto com o tamanho do texto em
+   qualquer tela, em vez de ficar desproporcional no mobile (fonte menor). */
+:root {
+  --ufmg-logo-tamanho: 1.2em;
+  --ufmg-logo-deslocamento-x: 0em;
+  --ufmg-logo-deslocamento-y: 0.22em;
+}
+
+.subtitulo-forum__ufmg {
+  height: var(--ufmg-logo-tamanho);
+  width: auto;
+  position: relative;
+  left: var(--ufmg-logo-deslocamento-x);
+  top: var(--ufmg-logo-deslocamento-y);
+  /* o SVG já vem branco — visível apenas na fase com a foto de fundo */
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.65));
+}
+
+.subtitulo-forum__ppgmus,
+.subtitulo-forum__barra,
+.subtitulo-forum__ufmg {
+  opacity: 0;
+}
+
+.subtitulo-forum.mostrar .subtitulo-forum__ppgmus {
+  animation: entrarDaDireita 0.7s cubic-bezier(.22, .61, .36, 1) forwards;
+}
+
+.subtitulo-forum.mostrar .subtitulo-forum__barra {
+  animation: revelarTextoLogo 0.5s ease forwards;
+  animation-delay: 0.25s;
+}
+
+.subtitulo-forum.mostrar .subtitulo-forum__ufmg {
+  animation: entrarDaEsquerda 0.7s cubic-bezier(.22, .61, .36, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+@keyframes entrarDaDireita {
+  from {
+    opacity: 0;
+    transform: translateX(1.5em);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes entrarDaEsquerda {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5em);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero__lead {
+  font-size: clamp(0.95rem, 0.76rem + 0.8vw, 1.4rem);
+  color: var(--cor-texto-suave);
+  max-width: 46rem;
+}
+
+/* Indicador de scroll — seta + chamada apontando para a Programação */
+.seta-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin: var(--espaco-4) auto 0;
+  width: fit-content;
+  color: var(--cor-primaria-700);
+  text-decoration: none;
+}
+
+.seta-scroll:hover {
+  color: var(--cor-destaque-500);
+}
+
+.seta-scroll__texto {
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.seta-scroll__icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1.5px solid var(--cor-borda);
+  border-radius: 999px;
+  animation: flutuarSeta 1.8s ease-in-out infinite;
+}
+
+.seta-scroll:hover .seta-scroll__icone {
+  border-color: var(--cor-destaque-500);
+}
+
+.seta-scroll svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@keyframes flutuarSeta {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Data do Fórum — texto simples, sem cartão */
+.data-forum {
+  text-align: center;
+  font-size: clamp(1.25rem, 0.63rem + 2.65vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--cor-destaque-500);
+  margin: 0 auto;
+}
+
+/* Cartão de destaque do Fórum */
+.destaque-forum {
+  margin-top: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-4) var(--espaco-4) calc(var(--espaco-4) - 3px);
+  border-top: 3px solid var(--cor-destaque-500);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.destaque-forum--datas {
+  justify-content: center;
+  text-align: center;
+  max-width: 34rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.destaque-forum__titulo {
+  margin: 0 0 0.25rem;
+  font-size: var(--texto-xl);
+  color: var(--cor-texto);
+}
+
+.destaque-forum__data {
+  font-weight: 700;
+  color: var(--cor-destaque-700);
+}
+
+.botao {
+  display: inline-block;
+  background: var(--cor-destaque-500);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--raio-sm);
+  white-space: nowrap;
+}
+
+.botao:hover {
+  background: var(--cor-destaque-700);
+  color: #fff;
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--cor-primaria-900);
+  border: 1.5px solid var(--cor-primaria-300);
+}
+
+.botao--secundario:hover {
+  background: var(--cor-primaria-100);
+  color: var(--cor-primaria-900);
+}
+
+/* Seções gerais */
+.secao {
+  padding: var(--espaco-5) 0;
+}
+
+.secao--alt {
+  background: var(--cor-fundo-alt);
+  border-top: 1px solid var(--cor-borda);
+  border-bottom: 1px solid var(--cor-borda);
+  scroll-margin-top: 4.5rem;
+}
+
+.sufixo-titulo {
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+}
+
+.grade {
+  display: grid;
+  gap: var(--espaco-3);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.cartao {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3);
+}
+
+.cartao h3 {
+  margin-top: 0;
+}
+
+.titulo-forum {
+  color: var(--cor-texto);
+}
+
+.lista-pessoas {
+  list-style: none;
+  margin: var(--espaco-3) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.lista-pessoas li {
+  padding: var(--espaco-2) 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.etiqueta {
+  display: inline-block;
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cor-primaria-700);
+  background: var(--cor-primaria-100);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: var(--espaco-1);
+}
+
+.aviso {
+  background: var(--cor-destaque-100);
+  border: 1px solid var(--cor-destaque-500);
+  border-radius: var(--raio-md);
+  padding: var(--espaco-3);
+  color: var(--cor-primaria-900);
+}
+
+/* Tabela de programação */
+.tabela-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+}
+
+.tabela-programacao {
+  width: 100%;
+  min-width: 40rem;
+  border-collapse: collapse;
+  background: var(--cor-superficie);
+  font-size: var(--texto-xs);
+  line-height: 1.4;
+}
+
+.tabela-programacao th,
+.tabela-programacao td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--cor-borda);
+  border-right: 1px solid var(--cor-borda);
+}
+
+.tabela-programacao small {
+  display: inline-block;
+  margin-top: 0.35em;
+}
+
+/* Em telas médias/estreitas, encolhe um pouco a tabela em vez de deixá-la
+   sempre exigir rolagem horizontal grande. */
+@media (max-width: 64rem) {
+  .tabela-programacao {
+    min-width: 34rem;
+  }
+
+  .tabela-programacao th,
+  .tabela-programacao td {
+    padding: 0.4rem 0.5rem;
+  }
+}
+
+.tabela-programacao th:last-child,
+.tabela-programacao td:last-child {
+  border-right: none;
+}
+
+.tabela-programacao thead th {
+  background: var(--cor-fundo-alt);
+  color: var(--cor-texto);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tabela-programacao tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-programacao td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--cor-primaria-700);
+}
+
+/* Logos institucionais */
+.logos-institucionais {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-4);
+  padding: var(--espaco-3) 0;
+}
+
+.logos-institucionais img {
+  height: 2.75rem;
+  width: auto;
+}
+
+/* Rodapé */
+.rodape {
+  padding: var(--espaco-4) 0 var(--espaco-5);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.rodape a {
+  color: var(--cor-texto-suave);
+}
+
+/* Logo animado do 4º Fórum (p5.js) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Tamanho e espaçamento do logo dinâmico (símbolo p5.js) + título "4º
+   Fórum...": 3 parâmetros independentes, sem acoplamento entre si.
+   - --logo-forum-escala: multiplica o tamanho do conjunto todo (símbolo +
+     título) via transform:scale() num wrapper por fora de .logo-forum —
+     não mexe na largura/layout da caixa em si, então não interfere na
+     coreografia interna dela (o translateX(26%)/mover-esquerda abaixo,
+     e o scaleLogoForum() em JS, continuam calibrados do mesmo jeito
+     independentemente da escala). 1 = tamanho normal, 1.3 = 30% maior etc.
+   - --logo-forum-espaco-acima / --logo-forum-espaco-abaixo: distância até
+     os elementos vizinhos, via margem no wrapper — não afeta o tamanho.
+   Como a escala usa transform (não redimensiona o layout), aumentar o
+   valor pode fazer o conjunto se sobrepor a elementos vizinhos — ajuste o
+   espaçamento junto se precisar. transform-origin:center top faz crescer
+   a partir do centro horizontal, mantendo o topo fixo. */
+:root {
+  --logo-forum-escala: 1;
+  --logo-forum-espaco-acima: 1.7rem;
+  --logo-forum-espaco-abaixo: 0px;
+}
+
+.logo-forum-escala {
+  width: 100%;
+  transform: scale(var(--logo-forum-escala));
+  transform-origin: center top;
+  margin-top: var(--logo-forum-espaco-acima);
+  margin-bottom: var(--logo-forum-espaco-abaixo);
+}
+
+.logo-forum {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  aspect-ratio: 800 / 160;
+  margin: 0 auto;
+  overflow: hidden;
+  /* Começa deslocado à direita para que o símbolo (à esquerda da caixa)
+     fique visualmente centralizado na tela enquanto o texto ainda está
+     invisível — ver .logo-forum.mover-esquerda, disparada pelo JS. */
+  transform: translateX(26%);
+  transition: transform 1s cubic-bezier(.65, 0, .35, 1);
+}
+
+.logo-forum.mover-esquerda {
+  transform: translateX(0);
+}
+
+/* Duração do fade-in do símbolo ao carregar a página, antes de começar a
+   abrir as janelas (web e mobile). */
+:root {
+  --logo-forum-fadein-duracao: 0.3s;
+}
+
+.logo-forum #wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 800px;
+  height: 160px;
+  transform-origin: top left;
+  opacity: 0;
+  animation: entradaLogoSimbolo var(--logo-forum-fadein-duracao) ease forwards;
+}
+
+@keyframes entradaLogoSimbolo {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.logo-forum canvas {
+  display: block;
+}
+
+.logo-forum #logo-text {
+  position: absolute;
+  left: 190px;
+  top: 60px;
+  transform: translateY(-50%);
+  font-family: var(--fonte-base);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.3;
+  color: var(--cor-texto);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: color 1s ease, text-shadow 1s ease;
+}
+
+/* Texto do logo — revelado por um "wipe" da direita para a esquerda,
+   acompanhando o sentido em que o símbolo desliza (ver .mover-esquerda). */
+.logo-forum #logo-text p {
+  margin: 0;
+  padding: 0;
+  clip-path: inset(0 0 0 100%);
+}
+
+.logo-forum #logo-text.mostrar p {
+  animation: revelarTextoLogoWipe 0.7s cubic-bezier(.22, .61, .36, 1) forwards;
+}
+
+.logo-forum #logo-text.mostrar p:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.logo-forum #logo-text.mostrar p:nth-child(2) {
+  animation-delay: .2s;
+}
+
+.logo-forum #logo-text.mostrar p:nth-child(3) {
+  animation-delay: .3s;
+}
+
+@keyframes revelarTextoLogoWipe {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0%);
+  }
+}
+
+@keyframes revelarTextoLogo {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Barra institucional, data, texto de chamada e seta — fase 3: entram em
+   sequência junto com a foto de fundo (ver iniciarFaseFoto em
+   partials/logo-forum.njk). */
+.anim-entrada {
+  opacity: 0;
+  transform: translateY(0.6em);
+}
+
+.anim-entrada.mostrar {
+  animation: revelarTextoLogo 0.6s cubic-bezier(.22, .61, .36, 1) forwards;
+}
+
+.anim-entrada--eyebrow.mostrar {
+  animation-delay: 0s;
+}
+
+.anim-entrada--data.mostrar {
+  animation-delay: 0.15s;
+}
+
+.anim-entrada--lead.mostrar {
+  animation-delay: 0.3s;
+}
+
+.anim-entrada--seta.mostrar {
+  animation-delay: 0.45s;
+}
+
+/* Revelação ao rolar a página (ex.: tabela de programação) */
+.reveal-scroll {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.7s cubic-bezier(.22, .61, .36, 1),
+    transform 0.7s cubic-bezier(.22, .61, .36, 1);
+}
+
+.reveal-scroll.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Utilitário: suprime qualquer transição enquanto presente (ex.: ao pular
+   direto para uma âncora, para não animar estados que deveriam já
+   nascer prontos). */
+.sem-transicao,
+.sem-transicao * {
+  transition: none !important;
+}
+
+/* Utilitários responsivos */
+@media (max-width: 40rem) {
+  h1 {
+    font-size: var(--texto-2xl);
+  }
+
+  h2 {
+    font-size: var(--texto-xl);
+  }
+
+  .destaque-forum {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Tamanho e espaço do logo+título no mobile — mesmos 3 parâmetros do
+     desktop (ver definição acima), só que redefinidos aqui dentro da media
+     query. overflow-x:hidden no body cobre o que a escala fizer "vazar"
+     além da borda da tela. */
+  :root {
+    --logo-forum-escala: 1.35;
+    --logo-forum-espaco-acima: var(--espaco-1);
+  }
+
+  .cabecalho__barra {
+    justify-content: flex-start;
+    text-align: left;
+    flex-wrap: wrap;
+  }
+
+  .marca {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+    order: -1;
+  }
+
+  .cabecalho__barra nav {
+    width: 100%;
+    order: 3;
+  }
+
+  .nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    padding: var(--espaco-1) 0 var(--espaco-2);
+  }
+
+  .nav.aberto {
+    display: flex;
+  }
+
+  .nav a {
+    padding: 0.75rem var(--espaco-1);
+    border-radius: 0;
+    border-bottom: 1px solid var(--cor-borda);
+  }
+
+  /* Na home, o menu some do fluxo normal e flutua transparente sobre a
+     foto — sem faixa branca — só o botão hambúrguer fica visível até ser
+     aberto (com fundo sólido nesse caso, para o painel de links ficar
+     legível). */
+  .pagina-inicial .cabecalho {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .pagina-inicial .nav.aberto {
+    background: var(--cor-superficie);
+    box-shadow: var(--sombra-suave);
+    border-radius: var(--raio-md);
+    padding: var(--espaco-1);
+  }
+
+  .pagina-inicial .hero {
+    min-height: 100vh;
+  }
+
+  /* Espaçamento vertical mais compacto no hero, para caber na tela. */
+  .logo-forum-escala {
+    margin-top: var(--espaco-1);
+  }
+
+  .subtitulo-forum {
+    margin-bottom: 0;
+  }
+
+  .hero__lead {
+    margin-top: var(--espaco-1) !important;
+  }
+
+  .seta-scroll {
+    margin-top: var(--espaco-2);
+  }
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>COMAPE — teaser</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/reel.css">
+</head>
+<body class="pagina-reel">
+  
+<script>
+  // Página fica em branco (nada anima) até apertar espaço — pensada para
+  // gravação manual de tela: dá pra ficar com a captura já rodando e
+  // disparar a animação no momento exato. Precisa rodar antes dos scripts
+  // do p5 (incluídos logo abaixo, em partials/logo-forum.njk), que checam
+  // essa flag em setup() pra decidir se já começam a desenhar ou esperam.
+  window.COMAPE_AGUARDAR_ESPACO = true;
+  document.body.classList.add("aguardando-espaco");
+  function iniciarTeaserAoApertarEspaco(e) {
+    if (e.code !== "Space" && e.key !== " ") return;
+    e.preventDefault();
+    document.removeEventListener("keydown", iniciarTeaserAoApertarEspaco);
+    document.body.classList.remove("aguardando-espaco");
+    if (typeof window.loop === "function") window.loop();
+  }
+  document.addEventListener("keydown", iniciarTeaserAoApertarEspaco);
+</script>
+
+<div class="tela-fone">
+  <section class="hero hero--media tela-fone__hero">
+    <div class="hero__media">
+      <img src="/assets/img/hero-ufmg-pb.jpg" alt="">
+    </div>
+    <div class="tela-fone__conteudo">
+      <div class="logo-forum-escala">
+  <div class="logo-forum" id="logo-forum-outer" aria-hidden="true">
+    <div id="wrapper">
+      <div id="logo-text">
+        <p>4º Fórum de Autoavaliação</p>
+        <p>e Planejamento Estratégico</p>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="sr-only">4º Fórum de Autoavaliação e Planejamento Estratégico — PPGMUS/UFMG</p>
+
+<script>
+  // Chamado pelo sketch p5.js (que anima só o símbolo/janelas) quando a
+  // abertura termina. Fase 2: o símbolo desliza da posição centralizada
+  // para a esquerda e o texto do logo (ainda preto, fundo branco) aparece.
+  function mostrarTextoForum() {
+    const outer = document.getElementById("logo-forum-outer");
+    const texto = document.getElementById("logo-text");
+    if (outer) outer.classList.add("mover-esquerda");
+    if (texto) texto.classList.add("mostrar");
+
+    // Fase 3: com o símbolo e o texto do logo já estabilizados, a foto de
+    // fundo entra em fade e a barra institucional, data, texto de chamada
+    // e seta aparecem juntas — nesse momento o texto do logo passa a branco.
+    setTimeout(iniciarFaseFoto, 1500);
+  }
+
+  function iniciarFaseFoto() {
+    const hero = document.querySelector(".hero--media");
+    if (hero) hero.classList.add("foto-visivel");
+    document.querySelectorAll(".anim-entrada").forEach((el) => el.classList.add("mostrar"));
+    const cabecalho = document.querySelector(".cabecalho");
+    if (cabecalho) cabecalho.classList.add("visivel");
+  }
+
+  function scaleLogoForum() {
+    const outer = document.getElementById("logo-forum-outer");
+    const inner = document.getElementById("wrapper");
+    if (!outer || !inner) return;
+    const scale = outer.clientWidth / 800;
+    // O símbolo (à esquerda) + o texto (à direita) não preenchem as 800
+    // unidades do canvas até o fim — sobra espaço vazio à direita. Esse
+    // deslocamento centraliza o conjunto símbolo+texto como um bloco só.
+    const DESLOCAMENTO_CENTRALIZACAO = 85;
+    inner.style.transform = "scale(" + scale + ") translateX(" + DESLOCAMENTO_CENTRALIZACAO + "px)";
+  }
+  window.addEventListener("resize", scaleLogoForum);
+  document.addEventListener("DOMContentLoaded", scaleLogoForum);
+  scaleLogoForum();
+</script>
+<script src="/assets/logo-forum/p5.min.js"></script>
+<script src="/assets/logo-forum/logo-classes.js"></script>
+<script src="/assets/logo-forum/sketch-forum.js"></script>
+
+
+      <div class="subtitulo-forum anim-entrada anim-entrada--eyebrow">
+        <span class="subtitulo-forum__ppgmus">PPGMUS</span>
+        <span class="subtitulo-forum__barra">|</span>
+        <img class="subtitulo-forum__ufmg" src="/assets/logos/logo-ufmg-branco.svg" alt="UFMG">
+      </div>
+
+      <p class="data-forum anim-entrada anim-entrada--data">26 a 28 de agosto de 2026</p>
+
+      <p class="hero__lead anim-entrada anim-entrada--lead">
+        Três dias de atividades abertas à comunidade do PPGMUS (docentes,
+        discentes, egressos e TAEs), dedicados à <strong>construção coletiva</strong> do Programa, à
+        <strong>autoavaliação</strong>, ao <strong>planejamento estratégico</strong> e à <strong>recepção de novos/as discentes</strong> do Programa.
+      </p>
+
+      <div class="brevemente-rotacao">
+        <p class="brevemente anim-entrada anim-entrada--seta">Programação em breve!</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>
